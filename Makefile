@@ -1,6 +1,5 @@
 
-SRCURL=https://minnie.tuhs.org/cgi-bin/utree.pl?file=V7/usr/src/cmd/prep
-MANURL=https://minnie.tuhs.org/cgi-bin/utree.pl?file=V7/usr/man/man1
+URL=https://minnie.tuhs.org/cgi-bin/utree.pl?file=V7
 SRCDIR=prep
 PATCHDIR=patches
 DESTROOTDIR=/usr/local
@@ -19,12 +18,13 @@ DESTROOTDIR=/usr/local
 
 fetch:
 	@mkdir -p ${SRCDIR}
-	@fetch -q "${SRCURL}/makefile" -o - | html2text | tail +2 > ${SRCDIR}/makefile
-	@fetch -q "${SRCURL}/prep.h" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep.h
-	@fetch -q "${SRCURL}/prep0.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep0.c
-	@fetch -q "${SRCURL}/prep1.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep1.c
-	@fetch -q "${SRCURL}/prep2.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep2.c
-	@fetch -q "${MANURL}/prep.1" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep.1
+	@fetch -q "${URL}/usr/src/cmd/prep/makefile" -o - | html2text | tail +2 > ${SRCDIR}/makefile
+	@fetch -q "${URL}/usr/src/cmd/prep/prep.h" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep.h
+	@fetch -q "${URL}/usr/src/cmd/prep/prep0.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep0.c
+	@fetch -q "${URL}/usr/src/cmd/prep/prep1.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep1.c
+	@fetch -q "${URL}/usr/src/cmd/prep/prep2.c" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep2.c
+	@fetch -q "${URL}/usr/man/man1/prep.1" -o - | html2text | awk 'BEGIN {BODY="no"} /=====/ {getline; BODY="yes"} BODY=="yes" {print}' > ${SRCDIR}/prep.1
+	@fetch -q "${URL}/usr/lib/eign" -o - | html2text | tail +2 > ${SRCDIR}/eign
 
 patch: fetch
 	@patch < ${PATCHDIR}/makefile.patch
@@ -44,6 +44,7 @@ ${SRCDIR}/prep.1.gz: ${SRCDIR}/prep.1
 install: ${SRCDIR}/prep ${SRCDIR}/prep.1.gz
 	install -m 0755 -o root -g wheel ${SRCDIR}/prep ${DESTROOTDIR}/bin
 	install -m 0644 -o root -g wheel ${SRCDIR}/prep.1.gz ${DESTROOTDIR}/man/man1
+	install -m 0644 -o root -g wheel ${SRCDIR}/eign ${DESTROOTDIR}/etc
 
 uninstall:
 	rm -f ${DESTROOTDIR}/bin/prep
