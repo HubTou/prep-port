@@ -1,0 +1,19 @@
+--- prep/prep2.c	2021-06-09 01:20:09.535227000 +0200
++++ prep-port/prep2.c	2021-06-08 11:49:49.112924000 +0200
+@@ -4,13 +4,14 @@
+ 
+ int	nflush;
+ 
+-put(string,n)
++put(string, n)
+ 	char	*string;
++    int		n;
+ {
+ 	int	i;
+ 	char	*o;
+ 
+-/*printf("%c %d\n",*string,n);/*DEBUG*/
++/*printf("%c %d\n",*string,n);*//*DEBUG*/
+ 
+ 	string--;
+ 

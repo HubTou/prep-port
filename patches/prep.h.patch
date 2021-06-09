@@ -1,0 +1,77 @@
+--- prep/prep.h	2021-06-09 01:20:04.451961000 +0200
++++ prep-port/prep.h	2021-06-08 18:13:25.275821000 +0200
+@@ -1,30 +1,17 @@
+-# define NUMC 128
+-# define NUMS 3
+-# define	NUMA	8
+-# define PTRI 1600
+-# define CHARI 16000
+-# define OUT	3
++#define NUMC 128
++#define NUMS 3
++#define	NUMA	8
++#define PTRI 1600
++#define CHARI 16000
++#define OUT	3
+ 
+-# define SKIP	0
+-# define COLLECT	1
+-# define SKIP2	2
+-# define WIDTH 6
+-struct	{
+-		char	*beg;
+-		int	ct;
+-		long	wdno;
+-	} temp[30];
++#define SKIP	0
++#define COLLECT	1
++#define SKIP2	2
++#define WIDTH 6
+ 
+-int	lflag;
+-int	puncfl;
+-int	hsw;
+-int	san;
+-int	t1;
++#include <stdlib.h>
+ 
+-
+-
+-char	tab[NUMS][NUMC];
+-
+ int	coll();
+ int	save();
+ int	hyphen();
+@@ -38,20 +25,6 @@
+ int	bslash();
+ int	punc();
+ 
+-char	line[300];
+-int	l;
+-int	lno;
+-int	c;
+-
+-int	only;
+-int	cs;
+-int	(*flag[8])();
+-int	fl;
+-int	wdflg;
+-long	wdnum;
+-char	num[WIDTH + 1];
+-int	igflg;
+-
+ struct	htab	{
+ 		int	hsiz;
+ 		int	ssiz;
+@@ -61,11 +34,3 @@
+ 		char	*symt;
+ 		};
+ 
+-struct	htab	itab;
+-
+-int	ipsp[PTRI];
+-char	issp[CHARI];
+-
+-
+-
+-FILE	*fi;

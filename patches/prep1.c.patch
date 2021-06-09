@@ -1,0 +1,196 @@
+--- prep/prep1.c	2021-06-09 01:20:07.842448000 +0200
++++ prep-port/prep1.c	2021-06-08 18:20:35.688125000 +0200
+@@ -6,22 +6,34 @@
+ 
+ int	tlno = 1;
+ 
++struct	{
++		char	*beg;
++		int	ct;
++		long	wdno;
++	}	temp[30];
++
++
+ coll()
+ {
++	extern int cs, t1, l;
++    extern char line[];
+ 	cs = COLLECT;
+ 	temp[t1].beg = &line[l];
+-	return;
++	return 0;
+ }
+ 
+ save()
+ {
+-	extern	only;
++	extern int only, cs, l, t1, igflg, c;
++    extern char line[];
++	extern long wdnum;
++    extern struct htab itab;
+ 	char	*pt1,*pt2,cbuf[30];
+ 	int	val;
+ 
+ 	if(cs != COLLECT) {
+ 		cs = SKIP;
+-		return;
++		return 0;
+ 	}
+ 	cs = SKIP;
+ 	line[l] = '\0';
+@@ -30,7 +42,7 @@
+ 	pt2 = cbuf-1;
+ 
+ 	wdnum++;
+-	while(*++pt2 = *++pt1)
++	while((*++pt2 = *++pt1))
+ 		if(*pt2 >= 'A' && *pt2 <= 'Z')
+ 			*pt2 |= 040;
+ 
+@@ -39,16 +51,18 @@
+ 		if(!val == !only) goto yes;
+ 
+ 		line[l] = c;
+-		return;
++		return 0;
+ 	}
+ yes:
+ 	temp[t1++].wdno = wdnum;
+ 	line[l] = c;
+-	return;
++	return 0;
+ }
+ 
+ ctout()
+ {
++	extern int lflag, lno, cs, t1, wdflg, san, l;
++	extern char num[];
+ 	register int	ct;
+ 	register char	*t2;
+ 	int	t3;
+@@ -70,7 +84,7 @@
+ 		}
+ 		ct = temp[t1].ct;
+ 		t2 = temp[t1].beg - 1;
+-/*		fprintf(stderr, "out: %s	%d\n", temp[t1].beg, ct);	/*DEBUG*/
++/*		fprintf(stderr, "out: %s	%d\n", temp[t1].beg, ct);*/	/*DEBUG*/
+ 		while(ct--)
+ 			if(*++t2 >= 'A' && *t2 <= 'Z')
+ 				*t2 |= 040;
+@@ -87,11 +101,12 @@
+ 	lno += tlno;
+ 	tlno = 1;
+ 	cs = SKIP;
+-	return;
++	return 0;
+ }
+ 
+ conf(n,width,buf)
+ 	long n;
++    int width;
+ 	char	*buf;
+ {
+ 	long	a;
+@@ -112,14 +127,18 @@
+ 
+ hyphen()
+ {
+-/*	fprintf(stderr, "hyphen\n");	/*DEBUG*/
++	extern int fl;
++	extern int (*flag[8])();
++/*	fprintf(stderr, "hyphen\n");*/	/*DEBUG*/
+ 	flag[++fl] = hyp1;
+ 	return(1);
+ }
+ 
+ hyp1()
+ {
+-/*	fprintf(stderr, "hyp1 c = %o\n",c);	/*DEBUG*/
++	extern int c, fl, l, hsw;
++	extern int (*flag[8])();
++/*	fprintf(stderr, "hyp1 c = %o\n",c);*/	/*DEBUG*/
+ 	if(c !=  '\n') {
+ 		fl--;
+ 		l--;
+@@ -137,8 +156,10 @@
+ 
+ hyp2()
+ {
++	extern c, l, hsw, cs, fl;
++	extern char tab[NUMS][NUMC], line[];
+ 	extern	(*acts[])();
+-/*	fprintf(stderr, "hyp2 c = %o l = %d\n",c,l);	/*DEBUG*/
++/*	fprintf(stderr, "hyp2 c = %o l = %d\n",c,l);*/	/*DEBUG*/
+ 	if(hsw && (tab[2][c] == 0)) {
+ 		l--;
+ 		if(c == '\n')	tlno++;
+@@ -160,6 +181,8 @@
+ 
+ gobble2()
+ {
++	extern int cs, fl;
++	extern int (*flag[8])();
+ 	static	ct2;
+ 
+ 	if(cs == COLLECT)	save();
+@@ -178,6 +201,7 @@
+ 
+ bslash()
+ {
++	extern int cs;
+ 	if(cs == COLLECT)	save();
+ 	cs = SKIP2;
+ 	return(1);
+@@ -185,12 +209,16 @@
+ 
+ bsp()
+ {
++	extern int fl;
++	extern int (*flag[8])();
+ 	flag[++fl] = bsp1;
+ 	return(1);
+ }
+ 
+ bsp1()
+ {
++	extern int fl, c, l;
++	extern char line[];
+ 	fl--;
+ 	if(c == '"')	return(1);
+ 
+@@ -200,7 +228,8 @@
+ 
+ punc()
+ {
+-
++	extern int cs, t1, l, puncfl;
++	extern char line[];
+ 	if(cs == COLLECT)
+ 		save();
+ 	if(puncfl) {
+@@ -208,6 +237,7 @@
+ 		temp[t1].ct = 1;
+ 		temp[t1++].wdno = 0;
+ 	}
++	return 0;
+ }
+ 
+ search(symbol,length,params,install)
+@@ -233,7 +263,7 @@
+ 	}
+ 
+ 	symbol[length] = '\0';
+-/*fprintf(stderr, "ssiz = %d; nsym = %d; %s\n", ssiz, nsym, symbol);/*DEBUG*/
++/*fprintf(stderr, "ssiz = %d; nsym = %d; %s\n", ssiz, nsym, symbol);*/	/*DEBUG*/
+ 	sp = symbol;
+ 
+ 	i = length;
+@@ -247,7 +277,7 @@
+ 		h = h<0?(-h)%hsiz:h%hsiz;
+ 	}
+ 	if(h == 0)	h++;
+-/*		fprintf(stderr, "%s %d\n",symbol,h);	/*DEBUG*/
++/*		fprintf(stderr, "%s %d\n",symbol,h);*/	/*DEBUG*/
+ 
+ 	while((p = &symt[hptr[h]]) > symt) {
+ 		j = length + 2;

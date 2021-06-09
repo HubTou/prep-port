@@ -1,0 +1,102 @@
+--- prep/prep0.c	2021-06-09 01:20:06.150106000 +0200
++++ prep-port/prep0.c	2021-06-08 18:14:09.408775000 +0200
+@@ -1,6 +1,34 @@
+ # include <stdio.h>
+ # include "prep.h"
+ 
++void driver(char*);
++void init();
++void compile(FILE*);
++
++int	lflag;
++int	puncfl;
++int	hsw;
++int	san;
++int	t1;
++char	tab[NUMS][NUMC];
++char	line[300];
++int	l;
++int	lno;
++int	c;
++int	only;
++int	cs;
++int	fl;
++int	wdflg;
++long	wdnum;
++char	num[WIDTH + 1];
++int	igflg;
++struct	htab	itab;
++int	ipsp[PTRI];
++char	issp[CHARI];
++FILE	*fi;
++
++int	(*flag[8])();
++
+ int	(*acts[])() =	{0,
+ 			coll,
+ 			save,
+@@ -71,6 +99,7 @@
+ };
+ 
+ main(argc,argv)
++    int		argc;
+ 	char	*argv[];
+ {
+ 	auto	i,j;
+@@ -107,14 +136,14 @@
+ 	exit(0);
+ }
+ 
+-driver(arg)
++void driver(arg)
+ char	*arg;
+ {
+ 	auto	p;
+ 
+ 	l = -1;
+ 	while((c = line[++l] = getc(fi)) != -1) {
+-/*	fprintf(stderr, "driver: c = %o l = %d\n",c,l); /*DEBUG*/
++/*	fprintf(stderr, "driver: c = %o l = %d\n",c,l);*/ /*DEBUG*/
+ 		if(l >= 299) {
+ 			lflag++;
+ 			l--;
+@@ -139,9 +168,9 @@
+ 				continue;
+ 		}
+ 
+-/*fprintf(stderr, "cs = %d cc = %c ca = %d\n",cs,c,tab[cs][c]);	/*DEBUG*/
++/*fprintf(stderr, "cs = %d cc = %c ca = %d\n",cs,c,tab[cs][c]);*/	/*DEBUG*/
+ 
+-		if(p = tab[cs][c])
++		if((p = tab[cs][c]))
+ 			(*acts[p])();
+ 		continue;
+ 	}
+@@ -149,7 +178,7 @@
+ 
+ }
+ 
+-init()
++void init()
+ {
+ 	FILE	*fio, *fopen();
+ 	extern	coll(),save(),ctout(),asym(),asw(),csym(),csw();
+@@ -174,7 +203,7 @@
+ }
+ 
+ 
+-flags(argv)
++int flags(argv)
+ 	char	*argv[];
+ {
+ 	int	j;
+@@ -219,7 +248,8 @@
+ 	}
+ 	return(j);
+ }
+-compile(fio)
++
++void compile(fio)
+ FILE	*fio;
+ {
+ 	char	buf[40],*b;

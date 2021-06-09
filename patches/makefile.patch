@@ -1,0 +1,18 @@
+--- prep/makefile	2021-06-09 01:20:02.758350000 +0200
++++ prep-port/makefile	2021-06-08 13:14:06.949592000 +0200
+@@ -1,4 +1,5 @@
+-CFLAGS = -n -O
++CC = c89
++CFLAGS = -O
+ 
+ all:	prep
+ 	:
+@@ -11,7 +12,7 @@
+ 	cmp prep /bin/prep
+ 	rm prep *.o
+ 
+-prep:	prep0.o prep1.o prep2.o; cc -s -o prep -n *.o
++prep:	prep0.o prep1.o prep2.o; cc -s -o prep *.o
+ 
+ prep0.o: prep0.c prep.h
+ prep1.o: prep1.c prep.h
