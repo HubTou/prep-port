@@ -1,5 +1,5 @@
---- prep/prep0.c	2021-06-09 01:20:06.150106000 +0200
-+++ prep-port/prep0.c	2021-06-08 18:14:09.408775000 +0200
+--- prep/prep0.c	2021-06-09 19:53:13.946544000 +0200
++++ prep-port/prep0.c	2021-06-09 19:54:09.686145000 +0200
 @@ -1,6 +1,34 @@
  # include <stdio.h>
  # include "prep.h"
@@ -35,6 +35,15 @@
  int	(*acts[])() =	{0,
  			coll,
  			save,
+@@ -13,7 +41,7 @@
+ 			};
+ 
+ 
+-char	*ignonl = "/usr/lib/eign";
++char	*ignonl = "/usr/local/etc/eign";
+ 
+ char tab[NUMS][NUMC] = {
+ 
 @@ -71,6 +99,7 @@
  };
  
