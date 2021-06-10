@@ -49,6 +49,7 @@ install: ${SRCDIR}/prep ${SRCDIR}/prep.1.gz
 uninstall:
 	rm -f ${DESTROOTDIR}/bin/prep
 	rm -f ${DESTROOTDIR}/man/man1/prep.1.gz
+	rm -f ${DESTROOTDIR}/etc/eign
 
 whatis:
 	makewhatis
@@ -57,7 +58,7 @@ man: ${SRCDIR}/prep.1
 	@nroff -mandoc ${SRCDIR}/prep.1
 
 clean:
-	@rm -rf ${SRCDIR}/*.o
+	@rm -f ${SRCDIR}/*.o
 
 distclean:
 	@rm -rf ${SRCDIR}
